@@ -1,0 +1,99 @@
+{% load staticfiles %}
+<html>
+<head>
+
+    <title>Django</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'css/foundation.min.css' %}">
+    <script src="{% static 'js/vendor/jquery.js' %}"></script>
+    <script src="{% static 'js/vendor/what-input.js' %}"></script>
+    <script src="{% static 'js/vendor/foundation.min.js' %}"></script>
+    <script src="{% static 'js/app.js' %}"></script>
+
+</head>
+<body>
+<div class="top-bar">
+    <section class="top-bar-left">
+        <ul class="menu">
+            <li><a href="/">Home</a></li>
+        </ul>
+    </section>
+    <section class="top-bar-left">
+        <ul class="menu">
+            <li><a href="/ajax/">Home_with_AJAX</a></li>
+        </ul>
+    </section>
+    <!----------------------------------------------------->
+     <section class="top-bar-right">
+         <ul class="menu">
+             {% if username %}
+                <!----------------------------------------------------->
+                <form action="/auth/logout/" method="post">
+                    {% csrf_token %}
+                    <input type="submit" class="button" value="Выйти ({{ username }}/User_id = {{ user_id }})">
+                </form>
+                 <!-- <li><a href="/auth/logout/">Выйти ({{ username }}/User_id = {{ user_id }})</a></li> -->
+                <!----------------------------------------------------->
+             {% else %}
+                <!----------------------------------------------------->
+                 <!-- Modal WINDOW -->
+                 <input data-open="modal" type="submit" class="button" value="Войти">
+
+                 <div class="reveal" id="modal" data-reveal>
+                     <!-- Код форми у модальному вікні START -->
+                     <!----------------------------------------------------->
+
+                     <form action="/auth/login/" method="post">
+                         {% csrf_token %}
+
+
+                         <div class="row">
+                             <div class="small-12 columns">
+                                 <label> Имя пользователя
+                                     <input type="text" placeholder="Enter Username" aria-describedby="exampleHelpText"
+                                            name="username" id="username">
+                                 </label>
+
+                                 <label> Пароль
+                                     <input type="password" placeholder="Enter Password" aria-describedby="exampleHelpText2"
+                                            data-equalto="password" name="password" id="password">
+                                 </label>
+                             </div>
+                         </div>
+                         {% if login_error %}
+                         <!--<label class="error">{{ login_error}}</label>-->
+                         <form data-abide>
+                             <div data-abide-error role="alert" class="alert callout" style="display: block;">
+                                 <p><i class="fi-alert"></i> {{ login_error}} </p>
+                             </div>
+                         </form>
+
+                         {% endif %}
+                         <input class="button" type="submit" value="Войти">
+                         <div class="label round secondary"><a href="/auth/register/">Регистрация</a> </div>
+                     </form>
+                     <!----------------------------------------------------->
+
+                     <!-- Код форми у модальному вікні END -->
+                     <button class="close-button" data-close aria-label="Close modal" type="button">
+                         <span aria-hidden="true">&times;</span>
+                     </button>
+                 </div>
+                     <!-- <li><a href="/auth/login/">Войти</a></li> -->
+                 <!----------------------------------------------------->
+             {% endif %}
+         </ul>
+     </section>
+</div>
+
+<!-- <div class="row">
+    {% block login %}{% endblock %}
+    </div> -->
+<div>
+    <section class="text-center">
+        {% block makeorder %}{% endblock %}
+    </section>
+ </div>
+
+
+</body>
+</html>

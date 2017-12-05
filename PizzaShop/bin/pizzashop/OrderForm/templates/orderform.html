@@ -1,0 +1,41 @@
+{% extends 'main.html' %}
+{% load staticfiles %}
+
+{% block makeorder %}
+{% if username %}
+<table align="center">
+    <tr>
+        <td align="center">
+            <form action="/orders/{{ user_id }}/" method="post">
+                {% csrf_token %}
+                <input type="submit" class="button" value="Мои заказы">
+            </form>
+        </td>
+        <td align="center">
+            <form action="/orders/makeorder/{{ user_id }}/" method="post">
+                {% csrf_token %}
+                <input type="submit" class="button" value="Сделать заказ">
+            </form>
+        </td>
+    </tr>
+</table>
+
+    {% for order in all_orders %}
+
+    <p class="small text"><b>Номер заказа : {{ order.order_number }}</b></p>
+    <p>
+        <b>Телефон заказчика :</b> {{ order.order_user_phone }}
+        <b>Адресс доставки :</b> {{ order.order_user_address }}
+        <b>Пицца :</b> {{ order.order_pizza_appearance }}
+        <b>Количество :</b> {{ order.order_pizza_quantity }}
+        <b>Дата :</b> {{ order.order_date }}
+    </p>
+
+    {% endfor %}
+{% endif %}
+
+{% if not all_orders%}
+<img src="{% static 'img/pizza.jpg' %}">
+{% endif %}
+
+{% endblock %}

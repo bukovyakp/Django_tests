@@ -1,0 +1,107 @@
+{% extends 'main.html' %}
+{% load staticfiles %}
+
+{% block makeorder %}
+<link rel="stylesheet" type="text/css" href="{% static 'css/foundation.min.css' %}">
+<script src="{% static 'js/vendor/jquery.js' %}"></script>
+<script src="{% static 'js/vendor/what-input.js' %}"></script>
+<script src="{% static 'js/vendor/foundation.min.js' %}"></script>
+<script src="{% static 'js/app.js' %}"></script>
+
+{% if username %}
+
+<form action="/ajax/orders/{{ user_id }}/" method="post">
+    {% csrf_token %}
+    <input type="submit" class="button" value="Мои заказы">
+</form>
+
+<table align="center">
+    <tr>
+        <td align="center">
+
+            <!----------------------------------------------------->
+            <!-- Modal WINDOW Мои заказы AJAX -->
+
+            <!--<input id="test" data-open="modal" type="submit" class="button" value="Мои заказы AJAX">-->
+            <input id="get_all_orders" data-open="modal" type="submit" class="button" value="Мои заказы AJAX">
+
+            <div class="reveal" id="modal" data-reveal>
+                <!-- Код форми у модальному вікні "Мои заказы AJAX" -->
+
+                <!--<div id="target">Здесь будет какая-то хуйня происходить</div>-->
+                <div id="all_orders"></div>
+
+                <!-- Код форми у модальному вікні END -->
+                <button class="close-button" data-close aria-label="Close modal" type="button">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+
+            <!----------------------------------------------------->
+        </td>
+        <td align="center">
+            <input data-open="makeorder" type="submit" class="button" value="Сделать заказ AJAX">
+            <!-- <form action="/ajax/orders/makeorder/{{ user_id }}/" method="post">
+                {% csrf_token %}
+                <input type="submit" class="button" value="Сделать заказ AJAX">
+            </form> -->
+        </td>
+    </tr>
+</table>
+
+
+<!----------------------------------------------------->
+<!-- Modal WINDOW -->
+<!-- <input data-open="makeorder" type="submit" class="button" value="Сделать заказ AJAX">-->
+
+<div class="reveal" id="makeorder" data-reveal>
+    <!-- Код форми у модальному вікні START -->
+    <!----------------------------------------------------->
+
+    <form action="/ajax/orders/makeorder/{{ user_id }}/" method="post">
+        {% csrf_token %}
+        {{ form }}
+        <input type="submit" class="button" value="Сделать заказ">
+    </form>
+
+    <!----------------------------------------------------->
+    <!-- Код форми у модальному вікні END -->
+    <button class="close-button" data-close aria-label="Close modal" type="button">
+        <span aria-hidden="true">&times;</span>
+    </button>
+</div>
+<!----------------------------------------------------->
+
+
+{% for order in all_orders %}
+
+<p class="small text"><b>Номер заказа : {{ order.order_number }}</b></p>
+<p>
+    <b>Телефон заказчика :</b> {{ order.order_user_phone }}
+    <b>Адресс доставки :</b> {{ order.order_user_address }}
+    <b>Пицца :</b> {{ order.order_pizza_appearance }}
+    <b>Количество :</b> {{ order.order_pizza_quantity }}
+    <b>Дата :</b> {{ order.order_date }}
+</p>
+
+{% endfor %}
+{% endif %}
+
+<!-- For test AJAX is work -->
+
+<!-- <input id="test" value="Жмяк-жмяк" type="button">
+<div id="target">Здесь будет какая-то хуйня происходить</div>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("#test").click(function() {
+            $.get('/ajax_test/', function(data) {
+                $('#target').html(data.param1 + ' ' + data.param2);
+            });
+        });
+
+    });
+</script>
+-->
+{% endblock %}
+
